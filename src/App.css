@@ -1,3 +1,12 @@
+body {
+  background-image: url("images/bg.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
+  min-height: 100vh;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +44,49 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.app-container {
+  padding: 0 15px;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(5, auto);
+
+}
+
+.table-cell {
+  position: relative;
+}
+.table-cell::before {
+  content: "";
+  display: block;
+  padding-top: 100%;
+}
+
+@media screen and (max-width: 767px) {
+  .MuiTypography-body2 {
+    font-size: .55rem !important;
+  }
+}
+
+.board {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes increaseFont {
+  50% {
+    transform: scale(1.5);
+  }
+}
+
+.is-bingo {
+  animation: increaseFont 2s;
 }
