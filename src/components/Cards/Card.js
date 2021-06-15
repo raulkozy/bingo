@@ -39,7 +39,6 @@ const useStyles = makeStyles({
 export default function SimpleCard(props) {
   const classes = useStyles();
   const { cardText, cardIndex } = props;
-  const bull = <span className={classes.bullet}>•</span>;
 
   const [isActive, setIsActive] = useState(false);
 

@@ -12,7 +12,7 @@ import {
   Box,
   Typography,
 } from "@material-ui/core";
-import { phrases } from "../../data/phrases";
+import { data } from "../../data/phrases";
 
 const useStyles = makeStyles({
   root: {
@@ -33,13 +33,52 @@ const Game = () => {
   const classes = useStyles();
   const [isBingo, setIsBingo] = useState(false);
   const [activeCards, setActiveCards] = useState([13]);
-  let [bingoCount, setBingoCount] = useState(0);
+  const [phrases, setPhrases] = useState([...data.phrases]);
 
-  const handleCardClick = async function (cardIndex) {
-    if(isBingo){
-        await setIsBingo(!isBingo)
-        console.log("isBingo veing set ???")
+  const shuffle = function (array) {
+    var currentIndex = array.length,
+      randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex],
+        array[currentIndex],
+      ];
     }
+
+    return array;
+  };
+
+  shuffle(data.phrases)
+  data.phrases.splice(12,0,data.title)
+
+  const bingoPoints = [
+    // row bingo
+    [1, 2, 3, 4, 5],
+    [6, 7, 8, 9, 10],
+    [11, 12, 13, 14, 15],
+    [16, 17, 18, 19, 20],
+    [21, 22, 23, 24, 25],
+
+    // column bingo
+    [1, 6, 11, 16, 21],
+    [2, 7, 12, 17, 22],
+    [3, 8, 13, 18, 23],
+    [4, 9, 14, 19, 24],
+    [5, 10, 15, 20, 25],
+
+    // diagonal bingo
+    [1, 7, 13, 19, 25],
+    [5, 9, 13, 17, 21],
+  ];
+
+  const handleCardClick = function (cardIndex) {
     let index = activeCards.indexOf(cardIndex);
     let cards = activeCards;
 
@@ -47,82 +86,46 @@ const Game = () => {
       cards.splice(index, 1);
     } else {
       cards.push(cardIndex);
-      cards.sort((a, b) => a - b);
     }
+
     // indicates the selected cards
     setActiveCards([...cards]);
-
-    if (cards.length > 5 || cards.length % 5 === 0) {
-      console.log(cards);
-      checkForBingoRowAndColumn(cards);
-    }
+    checkIsBingo(cards, cardIndex);
   };
 
-  // const checkForBingoDiagonal = function (arr) {
-  //     console.log(`checkForBingoDiagonal called `)
-  //     const bingoPoints = [
-  //         [1,7,19,25],
-  //         [5,9,17,21]
-  //     ]
+  const checkIsBingo = function (cards, cardIndex) {
+    let bingoSets = [];
+    for (let i in bingoPoints) {
+      let set = bingoPoints[i];
+      // get the bingo points for selected card index
+      if (set.includes(cardIndex)) bingoSets.push(set);
+    }
 
-  //     for(let point of bingoPoints) {
-  //         let m = arr.length;
-  //         let n = arr.length;
-  //         // console.log(arr)
-  //         console.log(isSubset(arr,point,m,n));
-  //         // if(isSubset(arr,point,m,n)) {
-  //         //     setIsBingo(true)
-  //         // }
-  //     }
-  // }
-
-  const checkForBingoRowAndColumn = function (arr) {
-    console.log(`checkForBingoRowAndColumn`);
-    const bingoPoints = [
-      [1, 2, 3, 4, 5],
-      [6, 7, 8, 9, 10],
-      [11, 12, 13, 14, 15],
-      [16, 17, 18, 19, 20],
-      [21, 22, 23, 24, 25],
-      [1, 6, 11, 16, 21],
-      [2, 7, 12, 17, 22],
-      [3, 8, 13, 18, 23],
-      [4, 9, 14, 19, 24],
-      [5, 10, 15, 20, 25],
-      [1, 7, 13, 19, 25],
-      [5, 9, 13, 17, 21],
-    ];
-
-    // [1,2,3,4,5,13]
-    // [1,2,3,4,5]
-    // setIsBingo(false);
-    for (let point of bingoPoints) {
-      let m = arr.length;
-      let n = point.length;
-      console.log((arr.length-1)%5, arr.length);
-      if (isSubset(arr, point, m, n) && ((arr.length-1)%5===0)) {
+    for (let i in bingoSets) {
+      setIsBingo(false);
+      let set = bingoSets[i];
+      if (isSubset(set, cards)) {
         setIsBingo(true);
-        // console.log("isBingo true");
-        // setIsBingo(false)
+        break;
       }
     }
   };
-  const isSubset = function (arr1, arr2, m, n) {
-    let i = 0;
-    let j = 0;
-    for (i = 0; i < n; i++) {
-      for (j = 0; j < m; j++)
-        if (arr2[i] == arr1[j]) {
-          break;
-        }
 
-      if (j == m) {
-        return false;
+  const isSubset = function (set, arr) {
+    let isPresent = true;
+    for (let i in set) {
+      let s = set[i];
+      if (!arr.includes(s)) {
+        isPresent = false;
+        break;
       }
     }
-
-    return true;
+    return isPresent;
   };
+
+  // Shuffle
+  // const shuffledPhrases = shuffle(data.phrases)
+  // const textPhrase = shuffledPhrases.splice(12,0,data.title);
 
   return (
     <div className={classes.root}>
