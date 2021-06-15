@@ -9,7 +9,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Box,
   Typography,
 } from "@material-ui/core";
 import { data } from "../../data/phrases";
@@ -33,30 +32,25 @@ const Game = () => {
   const classes = useStyles();
   const [isBingo, setIsBingo] = useState(false);
   const [activeCards, setActiveCards] = useState([13]);
-  const [phrases, setPhrases] = useState([...data.phrases]);
+  const [phrases, setPhrases] = useState([]);
+  
 
-  const shuffle = function (array) {
-    var currentIndex = array.length,
-      randomIndex;
-
-    // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ];
+  useEffect(() => {
+    let dataPhrases = shuffle(data.phrases);
+    dataPhrases[12] = data.title
+    console.log(dataPhrases)
+    setPhrases(dataPhrases)
+  }, [])
+  function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
     }
-
-    return array;
-  };
-
-  shuffle(data.phrases)
-  data.phrases.splice(12,0,data.title)
+    return a;
+}
 
   const bingoPoints = [
     // row bingo

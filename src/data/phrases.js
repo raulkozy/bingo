@@ -25,6 +25,34 @@ export const data = {
     "You will send the minutes",
     "Sorry, I was on mute",
     "Can you repeat please",
+    "is anyone there ?"
   ],
 };
 
+const shuffle = function (array) {
+  var currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
+
+export const phrases = async (data) => {
+  const shuffledPhrases = await shuffle(data.phrases);
+//   console.log(shuffledPhrases);
+  return shuffledPhrases.splice(12,0,data.title);
+
+  // return textPhrase;
+};

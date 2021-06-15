@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Card, CssBaseline, Collapse } from '@material-ui/core';
-import CardContent from '@material-ui/core/CardContent';
+import { Card } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
@@ -48,8 +47,8 @@ export default function SimpleCard(props) {
   }
 
   return (
-    <Card variant="outlined" className={classes.card + (isActive || cardIndex == 13 ? " active" : "")}>
-      <Button className={classes.cardBtn} onClick={handleClickBox} disabled={cardIndex == 13}>
+    <Card variant="outlined" className={classes.card + (isActive || cardIndex === 13 ? " active" : "")}>
+      <Button className={classes.cardBtn} onClick={handleClickBox} disabled={cardIndex === 13}>
         <Typography variant="body2" component="p">
           {cardText}
         </Typography>
